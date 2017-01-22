@@ -244,17 +244,6 @@ private commands(commands, delay=200) {
 	delayBetween(commands.collect{ command(it) }, delay)
 }
 
-def zwaveEvent(physicalgraph.zwave.commands.manufacturerspecificv2.ManufacturerSpecificReport cmd) {
-	log.debug "manufacturerId:   ${cmd.manufacturerId}"
-	log.debug "manufacturerName: ${cmd.manufacturerName}"
-	log.debug "productId:        ${cmd.productId}"
-	log.debug "productTypeId:    ${cmd.productTypeId}"
-	def msr = String.format("%04X-%04X-%04X", cmd.manufacturerId, cmd.productTypeId, cmd.productId)
-	updateDataValue("MSR", msr)
-	updateDataValue("manufacturer", cmd.manufacturerName)
-	createEvent([descriptionText: "$device.displayName MSR: $msr", isStateChange: false])
-}
-
 def retypeBasedOnMSR() {
 	switch (state.MSR) {
 		case "0086-0002-002D":
